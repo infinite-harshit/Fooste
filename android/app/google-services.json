@@ -1,0 +1,39 @@
+ {
+  "project_info": {
+    "project_number": "185276055601",
+    "project_id": "fooste-d6fa4",
+    "storage_bucket": "fooste-d6fa4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:185276055601:android:c64311242fc59462961510",
+        "android_client_info": {
+          "package_name": "com.example.demo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "185276055601-nfdeb4durpmocum8tusbj20shk1ruued.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsxqezzO9wGF-MI6jdVRRHBzWhSmRU7JY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "185276055601-nfdeb4durpmocum8tusbj20shk1ruued.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
