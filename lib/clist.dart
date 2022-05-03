@@ -280,7 +280,8 @@ class _ClistState extends State<Clist> {
       autofocus: false,
 
       controller: descriptionController,
-      keyboardType: TextInputType.text,
+      keyboardType: TextInputType.multiline,
+      minLines: 1,
       textInputAction: TextInputAction.done,
       onSaved:(value) {
         descriptionController.text=value!;
@@ -395,7 +396,7 @@ class _ClistState extends State<Clist> {
                             Flexible(child: addData)
                           ],
                         ),
-                        SizedBox(height: 200,)
+                        SizedBox(height:100,)
                       ],
                     ),
                   ),
@@ -421,10 +422,12 @@ class _ClistState extends State<Clist> {
     // sending these values
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User?user = _auth.currentUser;
+
     Pdetails productModel = Pdetails();
     //writing all values
     productModel.uid = user!.uid;
     productModel.pname=cnameController.text;
+   // productModel.pid=user!.pid;
     productModel.pphone=cphoneController.text;
     productModel.pcity=ccityController.text;
     productModel.pstate=ccityController.text;

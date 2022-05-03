@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:demo/homescreen.dart';
 import 'package:demo/login.dart';
 import 'package:demo/models/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,14 +8,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class Register extends StatefulWidget {
-  const Register({Key? key}) : super(key: key);
+class Profile extends StatefulWidget {
+  const Profile({Key? key}) : super(key: key);
 
   @override
-  State<Register> createState() => _RegisterState();
+  State<Profile> createState() => _ProfileState();
 }
 
-class _RegisterState extends State<Register> {
+class _ProfileState extends State<Profile> {
   final formkey=GlobalKey<FormState>();
   final _auth = FirebaseAuth.instance;
   final TextEditingController passwordController = new TextEditingController();
@@ -31,7 +32,7 @@ class _RegisterState extends State<Register> {
       controller: nameController,
       keyboardType: TextInputType.text,
       onSaved:(value) {
-         nameController.text=value!;
+        nameController.text=value!;
       },
       //validator
       validator: (value) {
@@ -182,7 +183,22 @@ class _RegisterState extends State<Register> {
       ),
     );
 
-    final signup = Material(
+    final back = Material(
+      elevation: 5,
+      borderRadius: BorderRadius.circular(30),
+      color: Colors.lightBlueAccent,
+      child: MaterialButton(
+        padding:EdgeInsets.fromLTRB(20, 15, 20, 15) ,
+        minWidth: MediaQuery.of(context).size.width,
+        onPressed:() {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context)=>Home()));
+        },
+        child:Text('Back',
+            style: TextStyle(fontSize: 20,color: Colors.black,fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center),
+      ),
+    );
+    final update = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(30),
       color: Colors.lightBlueAccent,
@@ -192,100 +208,87 @@ class _RegisterState extends State<Register> {
         onPressed:() {
           signUp(emailController.text,passwordController.text);
         },
-        child:Text('Sign Up',
+        child:Text('Update',
             style: TextStyle(fontSize: 20,color: Colors.black,fontWeight: FontWeight.bold),
             textAlign: TextAlign.center),
       ),
     );
     return Scaffold(
-
+      appBar: AppBar(title: Text('Profile'),backgroundColor: Colors.black,),
       body:Stack(
 
-       children:<Widget>[ Container(
-         constraints: BoxConstraints.expand(),
-         decoration: BoxDecoration(
+        children:<Widget>[ Container(
+          constraints: BoxConstraints.expand(),
+          decoration: BoxDecoration(
             image: DecorationImage(image: AssetImage('assets/login.png'),
               fit: BoxFit.cover,),
           ),
-         child:SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Form(
-              key: formkey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                 SizedBox(height: 20),
-                  Text('Create Account',
-                    style: TextStyle(
-                        fontSize: 30,fontWeight: FontWeight.bold,color: Colors.black
-                    ),),
-                  SizedBox(height: 20),
-                  nameField,
-                  SizedBox(height: 20),
-                  emailField,
-                  SizedBox(height: 20),
-                  passwordField,
-                  SizedBox(height: 20),
-                  confirmpasswordField,
-                  SizedBox(height: 20),
-                  phoneField,
-                  SizedBox(height: 20),
-                  signup,
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Already have an Account ? ",style: TextStyle(fontSize: 18),),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (context) => Login()));
-                        },
-                        child: Text('Login', style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 18,
-                            color: Colors.redAccent)),
-                      )
-                    ],
-                  )
+          child:SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(30.0),
+              child: Form(
+                key: formkey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(height: 20),
 
-                ],
+                    SizedBox(height: 20),
+                    nameField,
+                    SizedBox(height: 20),
+                    emailField,
+                    SizedBox(height: 20),
+                    passwordField,
+                    SizedBox(height: 20),
+                    confirmpasswordField,
+                    SizedBox(height: 20),
+                    phoneField,
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Flexible(child: back),
+                        SizedBox(width: 30,),
+                        Flexible(child: update)
+                      ],
+                    )
+
+                  ],
+                ),
               ),
             ),
           ),
         ),
-          ),
-    ],
-    ),
-      );
+        ],
+      ),
+    );
 
   }
   void signUp(String email,String password) async {
     if(formkey.currentState!.validate());
     await _auth.createUserWithEmailAndPassword(email: email, password: password)
-    .then((value) => {
+        .then((value) => {
       postDetailsToFirestore()
     }).catchError((e){
       Fluttertoast.showToast(msg: e!.message);
     });
   }
-postDetailsToFirestore() async {
+  postDetailsToFirestore() async {
     // calling our firestore
     // calling our usermodel
-   // sending these values
-  FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  User?user = _auth.currentUser;
-  UserModel userModel = UserModel();
-  //writing all values
-  userModel.uid = user!.uid;
-  userModel.email= user.email;
-  userModel.name=nameController.text;
-  userModel.phone=phoneController.text;
-  await firebaseFirestore.collection('users').doc(user.uid).set(userModel.toMap());
-  Fluttertoast.showToast(msg: 'Account created successfully');
-  Navigator.pushAndRemoveUntil((context),MaterialPageRoute(builder:(context)=>Login()),(route)=>false);
+    // sending these values
+    FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
+    User?user = _auth.currentUser;
+    UserModel userModel = UserModel();
+    //writing all values
+    userModel.uid = user!.uid;
+    userModel.email= user.email;
+    userModel.name=nameController.text;
+    userModel.phone=phoneController.text;
+    await firebaseFirestore.collection('users').doc(user.uid).set(userModel.toMap());
+    Fluttertoast.showToast(msg: 'Profile Updated');
+    Navigator.pushAndRemoveUntil((context),MaterialPageRoute(builder:(context)=>Home()),(route)=>false);
 
-}
+  }
 }

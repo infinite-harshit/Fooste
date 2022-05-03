@@ -1,5 +1,6 @@
 import 'package:demo/clist.dart';
 import 'package:demo/login.dart';
+import 'package:demo/profile.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -44,7 +45,9 @@ class _HomeState extends State<Home> {
                 ListTile(
                   leading:Icon(Icons.person,color: Colors.black,),
                   title: Text('Profile',style: TextStyle(fontSize: 20,color: Colors.black),),
-                  onTap: (){},
+                  onTap: (){
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context)=>Profile()));
+                  },
                 ),
                 ListTile(
                   leading:Icon(Icons.add_circle_rounded,color: Colors.black,),

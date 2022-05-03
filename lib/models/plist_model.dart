@@ -4,7 +4,8 @@ class Pdetails{
   String? pphone;
   String? pstate;
   String? pcity;
-  Pdetails({this.uid,this.pname,this.pphone,this.pcity,this.pstate});
+  String? pid;
+  Pdetails({this.pid,this.uid,this.pname,this.pphone,this.pcity,this.pstate});
 
 
 //data from server
@@ -14,7 +15,8 @@ return Pdetails(
   pname: 'pname',
   pphone: 'pphone',
   pcity: 'pcity',
-  pstate: 'pstate'
+  pstate: 'pstate',
+  pid:'pid',
 
 );
 }
@@ -25,7 +27,8 @@ Map<String,dynamic> toMap(){
     'pname':pname,
     'pphone':pphone,
     'pstate':pstate,
-    'pcity':pcity
+    'pcity':pcity,
+    'pid':pid,
   };
 }
 }
